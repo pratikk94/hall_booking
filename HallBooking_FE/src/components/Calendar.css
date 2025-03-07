@@ -1,0 +1,29 @@
+.fc {
+  /* Add custom styles for the calendar container */
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.fc-event {
+  cursor: pointer;
+  border: none;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.fc-toolbar-title {
+  font-size: 1.5rem !important;
+  font-weight: 600;
+}
+
+.fc-button-primary {
+  background-color: #1677ff !important;
+  border-color: #1677ff !important;
+}
+
+.fc-button-primary:disabled {
+  background-color: #1677ff88 !important;
+  border-color: #1677ff88 !important;
+} 
