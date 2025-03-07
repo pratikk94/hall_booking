@@ -80,5 +80,6 @@
   .calendar-container {
     height: 400px; /* Fixed height for mobile view */
     overflow-y: auto; /* Allow scrolling if content overflows */
+    width: 100%;
   }
 }
