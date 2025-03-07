@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Button, Space, Tag, message, Modal } from 'antd';
+import { Table, Button, Tag, message, Modal } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 
@@ -82,7 +82,9 @@ const MyBookings: React.FC<MyBookingsProps> = ({ approvedEvents, onCancelBooking
       title: 'Status',
       key: 'status',
       width: 80,
-      render: (_, record) => (
+      render: (_, 
+      //  record
+      ) => (
         <Tag color="green">Approved</Tag>
       ),
     },

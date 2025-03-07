@@ -166,9 +166,9 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ events, onStatusU
     .filter(event => event.extendedProps.status === 'pending');
 
   // Get user's approved bookings (assuming we have a way to identify the current user)
-  const userBookings = approvedEvents.filter(event => 
-    event.extendedProps.organizer === 'John Doe' // Replace with actual user identification
-  );
+  // const userBookings = approvedEvents.filter(event => 
+  //   event.extendedProps.organizer === 'John Doe' // Replace with actual user identification
+  // );
 
   const handleMonthChange = (value: number) => {
     setSelectedMonth(value);
@@ -204,10 +204,10 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ events, onStatusU
     message.success('Booking request submitted successfully! Please wait for approval.');
   };
 
-  const handleCancelBooking = (id: string) => {
-    // Update the booking status to rejected
-    onStatusUpdate(id, 'rejected');
-  };
+  // const handleCancelBooking = (id: string) => {
+  //   // Update the booking status to rejected
+  //   onStatusUpdate(id, 'rejected');
+  // };
 
   return (
     <div style={{ padding: '20px 0' }}>

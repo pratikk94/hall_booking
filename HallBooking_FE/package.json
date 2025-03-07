@@ -23,7 +23,10 @@
     "dayjs": "^1.11.13",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+<<<<<<< HEAD
     "react-highlight-words": "^0.21.0",
+=======
+>>>>>>> fd5c0a400c00dc08ae375384ab2fada22009a7da
     "react-router-dom": "^7.3.0"
   },
   "devDependencies": {
