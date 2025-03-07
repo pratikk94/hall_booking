@@ -38,7 +38,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSubmit, existingEvents }) =
   const [form] = Form.useForm();
   const [selectedVenue, setSelectedVenue] = React.useState<string | null>(null);
 
-  const disabledTime = (current: Dayjs | null, type: 'start' | 'end') => {
+  const disabledTime = (current: Dayjs | null) => {
     if (!current || !selectedVenue) return {};
 
     const currentDate = current.format('YYYY-MM-DD');

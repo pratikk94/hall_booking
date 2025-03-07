@@ -79,7 +79,7 @@ const BookingApprovals: React.FC<BookingApprovalsProps> = ({ pendingEvents, onSt
       title: 'Status',
       key: 'status',
       width: 100,
-      render: (_, record) => (
+      render: () => (
         <Tag color="gold">Pending</Tag>
       ),
     },

@@ -179,21 +179,12 @@ const App: React.FC = () => {
     );
   };
 
-  const handleCancelBooking = (id: string) => {
-    handleStatusUpdate(id, 'rejected');
-  };
-
-  // Get all approved events for the sidebar
-  const approvedEvents = events.filter(event => event.extendedProps?.status === 'approved');
-
   return (
     <Router>
       <Layout style={{ minHeight: '100vh' }}>
         <Sidebar 
           collapsed={collapsed} 
           onCollapse={setCollapsed}
-          approvedEvents={approvedEvents}
-          onCancelBooking={handleCancelBooking}
         />
         <Layout style={{ marginLeft: collapsed ? 80 : 200, transition: 'margin-left 0.2s ease' }}>
           <Content style={{ margin: '24px 16px', padding: 24, background: '#fff' }}>
