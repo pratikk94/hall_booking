@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { Select, Space, Tabs, message } from 'antd';
+import { Select, Space, Tabs, message, Modal } from 'antd';
 import BookingForm from './BookingForm';
 import BookingApprovals from './BookingApprovals';
 import './Calendar.css';
@@ -151,6 +151,8 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ events, onStatusU
   const [calendarApi, setCalendarApi] = useState<FullCalendar | null>(null);
   const [selectedMonth, setSelectedMonth] = useState<number>(2); // March 2025
   const [selectedYear, setSelectedYear] = useState<number>(2025);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
 
   // Filter out rejected events and use initialEvents if no events are provided
   const displayEvents = (events.length > 0 ? events : initialEvents)
@@ -180,6 +182,14 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ events, onStatusU
     setSelectedYear(value);
     if (calendarApi) {
       calendarApi.getApi().gotoDate(new Date(value, selectedMonth, 1));
+    }
+  };
+
+  const handleEventClick = (info: any) => {
+    const event = events.find(e => e.id === info.event.id);
+    if (event) {
+      setSelectedEvent(event);
+      setModalVisible(true);
     }
   };
 
@@ -279,9 +289,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ events, onStatusU
                       </div>
                     );
                   }}
-                  eventClick={(info) => {
-                    console.log('Event clicked:', info.event);
-                  }}
+                  eventClick={handleEventClick}
                   datesSet={(dateInfo) => {
                     const calendar = dateInfo.view.calendar;
                     setCalendarApi(calendar as unknown as FullCalendar);
@@ -320,6 +328,27 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ events, onStatusU
           }
         ]}
       />
+
+      <Modal
+        title="Event Details"
+        visible={modalVisible}
+        onCancel={() => setModalVisible(false)}
+        footer={null}
+      >
+        {selectedEvent && (
+          <div>
+            <p><strong>Title:</strong> {selectedEvent.title}</p>
+            <p><strong>Start:</strong> {selectedEvent.start}</p>
+            <p><strong>End:</strong> {selectedEvent.end}</p>
+            <p><strong>Hall:</strong> {selectedEvent.extendedProps.hall}</p>
+            <p><strong>Organizer:</strong> {selectedEvent.extendedProps.organizer}</p>
+            <p><strong>Status:</strong> {selectedEvent.extendedProps.status}</p>
+            <p><strong>Department:</strong> {selectedEvent.extendedProps.department}</p>
+            <p><strong>Mobile Number:</strong> {selectedEvent.extendedProps.mobileNumber}</p>
+            <p><strong>Request ID:</strong> {selectedEvent.extendedProps.requestId}</p>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };
