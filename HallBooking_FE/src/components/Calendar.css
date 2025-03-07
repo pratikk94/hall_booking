@@ -70,3 +70,15 @@
 .fc-event[style*="background-color: rgb(255, 215, 0)"] {
   background-color: #FFD700 !important;
 } 
+
+/* App.css or a global CSS file */
+.calendar-container {
+  height: 600px; /* Default height for desktop */
+}
+
+@media only screen and (max-width: 768px) {
+  .calendar-container {
+    height: 400px; /* Fixed height for mobile view */
+    overflow-y: auto; /* Allow scrolling if content overflows */
+  }
+}

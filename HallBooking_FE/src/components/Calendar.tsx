@@ -147,9 +147,8 @@ const years = Array.from({ length: 5 }, (_, i) => ({
   value: 2025 + i,
   label: (2025 + i).toString()
 }));
-
 const CalendarComponent: React.FC<CalendarComponentProps> = ({ events, onStatusUpdate }) => {
-  const [calendarApi, setCalendarApi] = useState<any>(null);
+  const [calendarApi, setCalendarApi] = useState<FullCalendar | null>(null);
   const [selectedMonth, setSelectedMonth] = useState<number>(2); // March 2025
   const [selectedYear, setSelectedYear] = useState<number>(2025);
 
@@ -173,18 +172,27 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ events, onStatusU
   const handleMonthChange = (value: number) => {
     setSelectedMonth(value);
     if (calendarApi) {
-      calendarApi.gotoDate(new Date(selectedYear, value, 1));
+      calendarApi.getApi().gotoDate(new Date(selectedYear, value, 1));
     }
   };
 
   const handleYearChange = (value: number) => {
     setSelectedYear(value);
     if (calendarApi) {
-      calendarApi.gotoDate(new Date(value, selectedMonth, 1));
+      calendarApi.getApi().gotoDate(new Date(value, selectedMonth, 1));
     }
   };
 
-  const handleNewBooking = (bookingData: any) => {
+  const handleNewBooking = (bookingData: {
+    title: string;
+    start: Date;
+    end: Date;
+    extendedProps: {
+      description?: string;
+      organizer: string;
+      attendees?: string[];
+    }
+  }) => {
     // Create a new event with a unique ID
     const newEvent = {
       ...bookingData,
@@ -218,7 +226,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ events, onStatusU
             key: '1',
             label: 'Calendar View',
             children: (
-              <>
+              <div className="calendar-container">
                 <div style={{ marginBottom: '20px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Space wrap>
                     <Select
@@ -254,7 +262,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ events, onStatusU
                     end: 'dayGridMonth,timeGridWeek,timeGridDay'
                   }}
                   events={displayEvents}
-                  height="calc(100vh - 200px)"
+                  height="100%" // Use full height of the container
                   eventContent={(eventInfo) => {
                     return (
                       <div 
@@ -275,22 +283,38 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ events, onStatusU
                     console.log('Event clicked:', info.event);
                   }}
                   datesSet={(dateInfo) => {
-                    setCalendarApi(dateInfo.view.calendar);
+                    const calendar = dateInfo.view.calendar;
+                    setCalendarApi(calendar as unknown as FullCalendar);
                     const currentDate = dateInfo.view.currentStart;
                     setSelectedMonth(currentDate.getMonth());
                     setSelectedYear(currentDate.getFullYear());
                   }}
                 />
-              </>
+              </div>
             )
           },
           {
             key: '2',
             label: 'New Booking',
-            children: <BookingForm onSubmit={handleNewBooking} existingEvents={approvedEvents} />
+            children: <BookingForm 
+              onSubmit={(values) => {
+                const startDate = new Date(values.dateRange[0]);
+                const endDate = new Date(values.dateRange[1]);
+                handleNewBooking({
+                  title: values.title,
+                  start: startDate,
+                  end: endDate,
+                  extendedProps: {
+                    description: values.description,
+                    organizer: values.department,
+                  }
+                });
+              }}
+              existingEvents={approvedEvents} 
+            />
           },
           {
-            key: '3',
+            key: '3', 
             label: 'Booking Approvals',
             children: <BookingApprovals pendingEvents={pendingEvents} onStatusUpdate={onStatusUpdate} />
           }
