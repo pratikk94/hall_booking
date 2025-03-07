@@ -187,17 +187,14 @@ const AppContent: React.FC = () => {
   };
 
   return (
-<<<<<<< HEAD
     <Layout style={{ minHeight: '100vh' }}>
       <Sidebar 
         collapsed={collapsed} 
         onCollapse={setCollapsed}
-        approvedEvents={approvedEvents}
-        onCancelBooking={handleCancelBooking}
-        currentUser={currentUser}
+        approvedEvents={events.filter(event => event.extendedProps?.status === 'approved')}
       />
       <Layout style={{ 
-        marginLeft: collapsed ? 80 : 200, 
+        marginLeft: collapsed ? 80 : 200,
         transition: 'margin-left 0.2s ease'
       }}>
         <Content style={{ 
@@ -212,22 +209,6 @@ const AppContent: React.FC = () => {
             <Route path="/users" element={<UserManagement />} />
           </Routes>
         </Content>
-=======
-    <Router>
-      <Layout style={{ minHeight: '100vh' }}>
-        <Sidebar 
-          collapsed={collapsed}
-          onCollapse={setCollapsed} approvedEvents={[]}        />
-        <Layout style={{ marginLeft: collapsed ? 80 : 200, transition: 'margin-left 0.2s ease' }}>
-          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff' }}>
-            <Routes>
-              <Route path="/" element={<CalendarComponent events={events} onStatusUpdate={handleStatusUpdate} />} />
-              <Route path="/calendar" element={<CalendarComponent events={events} onStatusUpdate={handleStatusUpdate} />} />
-              <Route path="/approvals" element={<BookingApprovals pendingEvents={events.filter(event => event.extendedProps?.status === 'pending')} onStatusUpdate={handleStatusUpdate} />} />
-            </Routes>
-          </Content>
-        </Layout>
->>>>>>> fd5c0a400c00dc08ae375384ab2fada22009a7da
       </Layout>
     </Layout>
   );

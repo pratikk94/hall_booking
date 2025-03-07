@@ -33,14 +33,6 @@ interface SidebarProps {
       requestId: string;
     };
   }>;
-<<<<<<< HEAD
-  onCancelBooking: (id: string) => void;
-  currentUser: {
-    name: string;
-    department: string;
-  };
-=======
->>>>>>> fd5c0a400c00dc08ae375384ab2fada22009a7da
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ collapsed, onCollapse, approvedEvents, onCancelBooking, currentUser }) => {
