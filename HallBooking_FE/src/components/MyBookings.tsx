@@ -21,9 +21,18 @@ interface MyBookingsProps {
     };
   }>;
   onCancelBooking: (id: string) => void;
+  currentUser: {
+    name: string;
+    department: string;
+  };
 }
 
-const MyBookings: React.FC<MyBookingsProps> = ({ approvedEvents, onCancelBooking }) => {
+const MyBookings: React.FC<MyBookingsProps> = ({ approvedEvents, onCancelBooking, currentUser }) => {
+  // Filter bookings for current user
+  const userBookings = approvedEvents.filter(
+    event => event.extendedProps.organizer === currentUser.name
+  );
+
   const handleCancel = (id: string) => {
     Modal.confirm({
       title: 'Cancel Booking',
@@ -50,12 +59,6 @@ const MyBookings: React.FC<MyBookingsProps> = ({ approvedEvents, onCancelBooking
       dataIndex: ['extendedProps', 'hall'],
       key: 'hall',
       width: 120,
-    },
-    {
-      title: 'Department',
-      dataIndex: ['extendedProps', 'department'],
-      key: 'department',
-      width: 100,
     },
     {
       title: 'Date & Time',
@@ -101,15 +104,15 @@ const MyBookings: React.FC<MyBookingsProps> = ({ approvedEvents, onCancelBooking
 
   return (
     <div style={{ padding: '16px 0', background: '#fff', borderRadius: '8px' }}>
-      <h2 style={{ marginBottom: '16px', paddingLeft: '8px' }}>My Approved Bookings</h2>
-      {approvedEvents.length === 0 ? (
+      <h2 style={{ marginBottom: '16px', paddingLeft: '8px' }}>My Bookings</h2>
+      {userBookings.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
-          No approved bookings found
+          No bookings found
         </div>
       ) : (
         <Table
           columns={columns}
-          dataSource={approvedEvents}
+          dataSource={userBookings}
           rowKey="id"
           pagination={{ pageSize: 10 }}
           scroll={{ x: 800 }}

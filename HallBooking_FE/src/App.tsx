@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import CalendarComponent from './components/Calendar';
 import BookingApprovals from './components/BookingApprovals';
+import UserManagement from './components/UserManagement';
 import './App.css';
 
 const { Content } = Layout;
@@ -52,10 +53,10 @@ const initialBookings: CalendarEvent[] = [
     backgroundColor: '#FFD700',
     extendedProps: {
       hall: 'Auditorium',
-      organizer: 'Jane Smith',
+      organizer: 'John Doe',
       status: 'pending' as const,
-      department: 'HR',
-      mobileNumber: '9876543210',
+      department: 'IT',
+      mobileNumber: '1234567890',
       createdAt: '2025-03-02T14:00:00',
       requestId: 'REQ-002'
     }
@@ -68,10 +69,10 @@ const initialBookings: CalendarEvent[] = [
     backgroundColor: '#32CD32',
     extendedProps: {
       hall: 'Main Hall',
-      organizer: 'Event Team',
+      organizer: 'John Doe',
       status: 'approved' as const,
-      department: 'Marketing',
-      mobileNumber: '5555555555',
+      department: 'IT',
+      mobileNumber: '1234567890',
       createdAt: '2025-03-03T09:00:00',
       requestId: 'REQ-003'
     }
@@ -80,14 +81,14 @@ const initialBookings: CalendarEvent[] = [
     id: '4',
     start: '2025-03-18T13:00:00',
     end: '2025-03-18T15:00:00',
-    title: 'Meeting Room B - Client Meeting',
+    title: 'Meeting Room B - Project Discussion',
     backgroundColor: '#FF4500',
     extendedProps: {
       hall: 'Meeting Room B',
-      organizer: 'Sales Team',
+      organizer: 'John Doe',
       status: 'rejected' as const,
-      department: 'Sales',
-      mobileNumber: '1111111111',
+      department: 'IT',
+      mobileNumber: '1234567890',
       createdAt: '2025-03-04T13:00:00',
       requestId: 'REQ-004'
     }
@@ -100,10 +101,10 @@ const initialBookings: CalendarEvent[] = [
     backgroundColor: '#FFD700',
     extendedProps: {
       hall: 'Workshop Room 1',
-      organizer: 'Tech Team',
+      organizer: 'John Doe',
       status: 'pending' as const,
       department: 'IT',
-      mobileNumber: '2222222222',
+      mobileNumber: '1234567890',
       createdAt: '2025-03-05T09:00:00',
       requestId: 'REQ-005'
     }
@@ -116,10 +117,10 @@ const initialBookings: CalendarEvent[] = [
     backgroundColor: '#32CD32',
     extendedProps: {
       hall: 'Seminar Hall',
-      organizer: 'AI Group',
+      organizer: 'John Doe',
       status: 'approved' as const,
       department: 'IT',
-      mobileNumber: '3333333333',
+      mobileNumber: '1234567890',
       createdAt: '2025-03-06T13:00:00',
       requestId: 'REQ-006'
     }
@@ -128,14 +129,14 @@ const initialBookings: CalendarEvent[] = [
     id: '7',
     start: '2025-03-21T10:00:00',
     end: '2025-03-21T12:00:00',
-    title: 'Training Room - New Employee Orientation',
+    title: 'Training Room - Team Training',
     backgroundColor: '#FFD700',
     extendedProps: {
       hall: 'Training Room',
-      organizer: 'HR Team',
+      organizer: 'John Doe',
       status: 'pending' as const,
-      department: 'HR',
-      mobileNumber: '4444444444',
+      department: 'IT',
+      mobileNumber: '1234567890',
       createdAt: '2025-03-07T10:00:00',
       requestId: 'REQ-007'
     }
@@ -144,21 +145,27 @@ const initialBookings: CalendarEvent[] = [
     id: '8',
     start: '2025-03-22T14:00:00',
     end: '2025-03-22T16:00:00',
-    title: 'Conference Room B - Project Review',
+    title: 'Conference Room B - Sprint Planning',
     backgroundColor: '#FFD700',
     extendedProps: {
       hall: 'Conference Room B',
-      organizer: 'Project Team',
+      organizer: 'John Doe',
       status: 'pending' as const,
       department: 'IT',
-      mobileNumber: '5555555555',
+      mobileNumber: '1234567890',
       createdAt: '2025-03-08T14:00:00',
       requestId: 'REQ-008'
     }
   }
 ];
 
-const App: React.FC = () => {
+// Mock current user data (replace with actual authentication later)
+const currentUser = {
+  name: 'John Doe',
+  department: 'IT'
+};
+
+const AppContent: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [events, setEvents] = useState<CalendarEvent[]>(initialBookings);
 
@@ -187,24 +194,39 @@ const App: React.FC = () => {
   const approvedEvents = events.filter(event => event.extendedProps?.status === 'approved');
 
   return (
-    <Router>
-      <Layout style={{ minHeight: '100vh' }}>
-        <Sidebar 
-          collapsed={collapsed} 
-          onCollapse={setCollapsed}
-          approvedEvents={approvedEvents}
-          onCancelBooking={handleCancelBooking}
-        />
-        <Layout style={{ marginLeft: collapsed ? 80 : 200, transition: 'margin-left 0.2s ease' }}>
-          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff' }}>
-            <Routes>
-              <Route path="/" element={<CalendarComponent events={events} onStatusUpdate={handleStatusUpdate} />} />
-              <Route path="/calendar" element={<CalendarComponent events={events} onStatusUpdate={handleStatusUpdate} />} />
-              <Route path="/approvals" element={<BookingApprovals pendingEvents={events.filter(event => event.extendedProps?.status === 'pending')} onStatusUpdate={handleStatusUpdate} />} />
-            </Routes>
-          </Content>
-        </Layout>
+    <Layout style={{ minHeight: '100vh' }}>
+      <Sidebar 
+        collapsed={collapsed} 
+        onCollapse={setCollapsed}
+        approvedEvents={approvedEvents}
+        onCancelBooking={handleCancelBooking}
+        currentUser={currentUser}
+      />
+      <Layout style={{ 
+        marginLeft: collapsed ? 80 : 200, 
+        transition: 'margin-left 0.2s ease'
+      }}>
+        <Content style={{ 
+          margin: '24px 16px', 
+          padding: 24,
+          background: '#fff',
+          borderRadius: '8px'
+        }}>
+          <Routes>
+            <Route path="/" element={<CalendarComponent events={events} onStatusUpdate={handleStatusUpdate} />} />
+            <Route path="/approvals" element={<BookingApprovals pendingEvents={events.filter(event => event.extendedProps?.status === 'pending')} onStatusUpdate={handleStatusUpdate} />} />
+            <Route path="/users" element={<UserManagement />} />
+          </Routes>
+        </Content>
       </Layout>
+    </Layout>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 };
