@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Layout } from 'antd';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import CalendarComponent from './components/Calendar';
 import BookingApprovals from './components/BookingApprovals';
 import UserManagement from './components/UserManagement';
+import Login from './components/Login';
+import Signup from './components/Signup';
+import LogoutButton from './components/LogoutButton';
+import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
+import { AuthProvider } from './context/AuthContext';
 
 const { Content } = Layout;
 
@@ -212,38 +217,51 @@ const AppContent: React.FC = () => {
   }, []);
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Sidebar 
-        collapsed={collapsed} 
-        onCollapse={setCollapsed}
-        approvedEvents={events.filter(event => event.extendedProps?.status === 'approved')}
-      />
-      <Layout style={{ 
-        marginLeft: collapsed ? 80 : 200,
-        transition: 'margin-left 0.2s ease'
-      }}>
-        <Content style={{ 
-          margin: '24px 16px', 
-          padding: 24,
-          background: '#fff',
-          borderRadius: '8px'
+    <AuthProvider>
+      <Layout style={{ minHeight: '100vh' }}>
+        <Sidebar 
+          collapsed={collapsed} 
+          onCollapse={setCollapsed}
+          approvedEvents={events.filter(event => event.extendedProps?.status === 'approved')}
+        />
+        <Layout style={{ 
+          marginLeft: collapsed ? 80 : 200,
+          transition: 'margin-left 0.2s ease'
         }}>
-          <Routes>
-            <Route path="/" element={<CalendarComponent events={events} onStatusUpdate={handleStatusUpdate} />} />
-            <Route path="/approvals" element={<BookingApprovals pendingEvents={events.filter(event => event.extendedProps?.status === 'pending')} onStatusUpdate={handleStatusUpdate} />} />
-            <Route path="/users" element={<UserManagement />} />
-          </Routes>
-        </Content>
+          <Content style={{ 
+            margin: '24px 16px', 
+            padding: 24,
+            background: '#fff',
+            borderRadius: '8px'
+          }}>
+            <Routes>
+              <Route path="/" element={<ProtectedRoute><CalendarComponent events={events} onStatusUpdate={handleStatusUpdate} /></ProtectedRoute>} />
+              <Route path="/approvals" element={<ProtectedRoute><BookingApprovals pendingEvents={events.filter(event => event.extendedProps?.status === 'pending')} onStatusUpdate={handleStatusUpdate} /></ProtectedRoute>} />
+              <Route path="/users" element={<ProtectedRoute><UserManagement /></ProtectedRoute>} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+            </Routes>
+          </Content>
+        </Layout>
+        <LogoutButton />
       </Layout>
-    </Layout>
+    </AuthProvider>
   );
 };
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/protected" element={<ProtectedRoute><AppContent /></ProtectedRoute>} />
+          <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
+        <LogoutButton />
+      </Router>
+    </AuthProvider>
   );
 };
 

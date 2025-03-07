@@ -185,7 +185,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ events, onStatusU
     }
   };
 
-  const handleEventClick = (info: any) => {
+  const handleEventClick = (info: { event: { id: string } }) => {
     const event = events.find(e => e.id === info.event.id);
     if (event) {
       setSelectedEvent(event);
