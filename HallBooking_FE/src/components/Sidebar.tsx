@@ -4,38 +4,20 @@ import {
   HomeOutlined,
   CalendarOutlined,
   CheckSquareOutlined,
-  UserOutlined,
   LogoutOutlined,
-  BookOutlined
+  MenuUnfoldOutlined,
+  MenuFoldOutlined
 } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
-import MyBookings from './MyBookings';
 
 const { Sider } = Layout;
 
 interface SidebarProps {
   collapsed: boolean;
   onCollapse: (collapsed: boolean) => void;
-  approvedEvents: Array<{
-    id: string;
-    start: string;
-    end: string;
-    title: string;
-    backgroundColor: string;
-    extendedProps: {
-      hall: string;
-      organizer: string;
-      status: string;
-      department: string;
-      mobileNumber: string;
-      createdAt: string;
-      requestId: string;
-    };
-  }>;
-  onCancelBooking: (id: string) => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ collapsed, onCollapse, approvedEvents, onCancelBooking }) => {
+const Sidebar: React.FC<SidebarProps> = ({ collapsed, onCollapse }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -75,18 +57,28 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, onCollapse, approvedEvents
         bottom: 0,
         background: '#fff',
         boxShadow: '2px 0 8px 0 rgba(29,35,41,.05)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between'
       }}
     >
-      <div style={{ padding: '16px', textAlign: 'center' }}>
-        <h2 style={{ margin: 0, color: '#1890ff' }}>Hall Booking</h2>
+      <div>
+        <div style={{ padding: '16px', textAlign: 'center' }}>
+          <Button 
+            type="text" 
+            onClick={() => onCollapse(!collapsed)}
+            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+          />
+          {!collapsed && <h2 style={{ margin: 0, color: '#1890ff' }}>Hall Booking</h2>}
+        </div>
+        <Menu
+          theme="light"
+          mode="inline"
+          selectedKeys={[location.pathname]}
+          items={menuItems}
+          onClick={({ key }) => handleMenuClick(key)}
+        />
       </div>
-      <Menu
-        theme="light"
-        mode="inline"
-        selectedKeys={[location.pathname]}
-        items={menuItems}
-        onClick={({ key }) => handleMenuClick(key)}
-      />
       <div style={{ padding: '16px', borderTop: '1px solid #f0f0f0' }}>
         <Space direction="vertical" style={{ width: '100%' }}>
           <Button 
@@ -94,9 +86,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, onCollapse, approvedEvents
             icon={<LogoutOutlined />} 
             block
             danger
-          >
-            Logout
-          </Button>
+          />
         </Space>
       </div>
       {/* {!collapsed && (
