@@ -183,9 +183,8 @@ const App: React.FC = () => {
     <Router>
       <Layout style={{ minHeight: '100vh' }}>
         <Sidebar 
-          collapsed={collapsed} 
-          onCollapse={setCollapsed}
-        />
+          collapsed={collapsed}
+          onCollapse={setCollapsed} approvedEvents={[]}        />
         <Layout style={{ marginLeft: collapsed ? 80 : 200, transition: 'margin-left 0.2s ease' }}>
           <Content style={{ margin: '24px 16px', padding: 24, background: '#fff' }}>
             <Routes>
