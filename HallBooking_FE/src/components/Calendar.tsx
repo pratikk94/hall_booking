@@ -219,8 +219,8 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ events, onStatusU
             label: 'Calendar View',
             children: (
               <>
-                <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <Space>
+                <div style={{ marginBottom: '20px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Space wrap>
                     <Select
                       value={selectedMonth}
                       onChange={handleMonthChange}
@@ -234,7 +234,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ events, onStatusU
                       style={{ width: 100 }}
                     />
                   </Space>
-                  <div style={{ display: 'flex', gap: '20px' }}>
+                  <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <div style={{ width: '20px', height: '20px', backgroundColor: '#32CD32', borderRadius: '4px' }}></div>
                       <span>Approved</span>

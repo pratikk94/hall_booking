@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout, Menu, Button, Space, Modal } from 'antd';
 import {
   HomeOutlined,
@@ -35,14 +35,34 @@ interface SidebarProps {
   }>;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ collapsed, onCollapse,
-  // approvedEvents, 
-  // onCancelBooking,
-  //  currentUser 
-  }) => {
+const Sidebar: React.FC<SidebarProps> = ({ collapsed, onCollapse }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [rulesModalVisible, setRulesModalVisible] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        onCollapse(true);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => window.removeEventListener('resize', handleResize);
+  }, [onCollapse]);
+
+  useEffect(() => {
+    const handleOrientationChange = () => {
+      if (window.innerHeight > window.innerWidth) {
+        alert("Please rotate your device to landscape mode for the best experience.");
+      }
+    };
+
+    window.addEventListener('resize', handleOrientationChange);
+    handleOrientationChange(); // Initial check
+
+    return () => window.removeEventListener('resize', handleOrientationChange);
+  }, []);
 
   const showRulesModal = () => {
     setRulesModalVisible(true);

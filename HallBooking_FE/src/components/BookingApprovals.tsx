@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Button, Space, Tag, message } from 'antd';
+import { Table, Button, Space, Tag, message,  Grid } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 
@@ -107,6 +107,9 @@ const BookingApprovals: React.FC<BookingApprovalsProps> = ({ pendingEvents, onSt
     },
   ];
 
+  const { useBreakpoint } = Grid;
+  const screens = useBreakpoint();
+
   return (
     <div style={{ padding: '24px', background: '#fff', borderRadius: '8px' }}>
       <h2 style={{ marginBottom: '24px' }}>Pending Booking Requests</h2>
@@ -115,10 +118,12 @@ const BookingApprovals: React.FC<BookingApprovalsProps> = ({ pendingEvents, onSt
         dataSource={pendingEvents}
         rowKey="id"
         pagination={{ pageSize: 10 }}
-        scroll={{ x: 1300 }}
+        scroll={{ x: 'max-content' }}
       />
+      {screens.md ? <p>Visible on medium screens and up</p> : <p>Visible on small screens</p>}
     </div>
   );
 };
+
 
 export default BookingApprovals; 

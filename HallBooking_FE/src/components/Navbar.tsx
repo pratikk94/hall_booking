@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
         Hall Booking
       </div>
 
-      <Space size="large">
+      <Space size="large" style={{ flexWrap: 'wrap' }}>
         <Badge count={5}>
           <Button type="text" icon={<BellOutlined style={{ fontSize: '20px', color: '#fff' }} />} />
         </Badge>

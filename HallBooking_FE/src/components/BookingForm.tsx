@@ -1,12 +1,18 @@
 import React from 'react';
-import { Form, Input, DatePicker, Select, Button, message } from 'antd';
+import { Form, Input, DatePicker, Select, Button, message, Row, Col } from 'antd';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 
 const { RangePicker } = DatePicker;
 
 interface BookingFormProps {
-  onSubmit: (values: any) => void;
+  onSubmit: (values: {
+    title: string;
+    description: string;
+    venue: string;
+    department: string;
+    dateRange: [string, string];
+  }) => void;
   existingEvents: Array<{
     start: string;
     end: string;
@@ -65,7 +71,16 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSubmit, existingEvents }) =
     };
   };
 
-  const handleSubmit = (values: any) => {
+  interface BookingFormValues {
+    dateTime: [Dayjs, Dayjs];
+    venueType: string;
+    name: string;
+    department: string;
+    reason: string;
+    mobileNumber: string;
+  }
+
+  const handleSubmit = (values: BookingFormValues) => {
     const [startDate, endDate] = values.dateTime;
     
     // Check for conflicts with existing bookings
@@ -91,18 +106,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSubmit, existingEvents }) =
     }
 
     const bookingData = {
-      start: startDate.format('YYYY-MM-DDTHH:mm:ss'),
-      end: endDate.format('YYYY-MM-DDTHH:mm:ss'),
       title: `${values.venueType} - ${values.reason}`,
-      backgroundColor: '#FFD700', // Yellow for pending
-      extendedProps: {
-        hall: values.venueType,
-        organizer: values.name,
-        status: 'pending',
-        department: values.department,
-        mobileNumber: values.mobileNumber
-      }
-    };
+      description: values.reason,
+      venue: values.venueType,
+      department: values.department,
+      dateRange: [startDate.format('YYYY-MM-DDTHH:mm:ss'), endDate.format('YYYY-MM-DDTHH:mm:ss')],
+    } as { title: string; description: string; venue: string; department: string; dateRange: [string, string] };
 
     onSubmit(bookingData);
     form.resetFields();
@@ -127,68 +136,80 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSubmit, existingEvents }) =
           dateTime: [dayjs(), dayjs().add(1, 'hour')]
         }}
       >
-        <Form.Item
-          name="venueType"
-          label="Venue Type"
-          rules={[{ required: true, message: 'Please select venue type' }]}
-        >
-          <Select 
-            options={venueTypes}
-            onChange={(value) => setSelectedVenue(value)}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="dateTime"
-          label="Start and End Date/Time"
-          rules={[{ required: true, message: 'Please select date and time' }]}
-        >
-          <RangePicker
-            showTime
-            format="YYYY-MM-DD HH:mm"
-            style={{ width: '100%' }}
-            disabledTime={disabledTime}
-            disabledDate={(current) => {
-              return current && current < dayjs().startOf('day');
-            }}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="department"
-          label="Department"
-          rules={[{ required: true, message: 'Please select department' }]}
-        >
-          <Select options={departments} />
-        </Form.Item>
-
-        <Form.Item
-          name="name"
-          label="Your Name"
-          rules={[{ required: true, message: 'Please enter your name' }]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          name="mobileNumber"
-          label="Mobile Number"
-          rules={[
-            { required: true, message: 'Please enter mobile number' },
-            { pattern: /^[0-9]{10}$/, message: 'Please enter valid 10-digit mobile number' }
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          name="reason"
-          label="Reason for Booking"
-          rules={[{ required: true, message: 'Please enter reason for booking' }]}
-        >
-          <Input.TextArea rows={4} />
-        </Form.Item>
-
+        <Row gutter={16}>
+          <Col xs={24} sm={12}>
+            <Form.Item
+              name="venueType"
+              label="Venue Type"
+              rules={[{ required: true, message: 'Please select venue type' }]}
+            >
+              <Select 
+                options={venueTypes}
+                onChange={(value) => setSelectedVenue(value)}
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={12}>
+            <Form.Item
+              name="department"
+              label="Department"
+              rules={[{ required: true, message: 'Please select department' }]}
+            >
+              <Select options={departments} />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col xs={24} sm={12}>
+            <Form.Item
+              name="dateTime"
+              label="Start and End Date/Time"
+              rules={[{ required: true, message: 'Please select date and time' }]}
+            >
+              <RangePicker
+                showTime
+                format="YYYY-MM-DD HH:mm"
+                style={{ width: '100%' }}
+                disabledTime={disabledTime}
+                disabledDate={(current) => {
+                  return current && current < dayjs().startOf('day');
+                }}
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={12}>
+            <Form.Item
+              name="name"
+              label="Your Name"
+              rules={[{ required: true, message: 'Please enter your name' }]}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col xs={24} sm={12}>
+            <Form.Item
+              name="mobileNumber"
+              label="Mobile Number"
+              rules={[
+                { required: true, message: 'Please enter mobile number' },
+                { pattern: /^[0-9]{10}$/, message: 'Please enter valid 10-digit mobile number' }
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={12}>
+            <Form.Item
+              name="reason"
+              label="Reason for Booking"
+              rules={[{ required: true, message: 'Please enter reason for booking' }]}
+            >
+              <Input.TextArea rows={4} />
+            </Form.Item>
+          </Col>
+        </Row>
         <Form.Item>
           <Button type="primary" htmlType="submit" block>
             Submit Booking Request

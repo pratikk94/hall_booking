@@ -82,9 +82,7 @@ const MyBookings: React.FC<MyBookingsProps> = ({ approvedEvents, onCancelBooking
       title: 'Status',
       key: 'status',
       width: 80,
-      render: (_, 
-      //  record
-      ) => (
+      render: () => (
         <Tag color="green">Approved</Tag>
       ),
     },
@@ -117,7 +115,7 @@ const MyBookings: React.FC<MyBookingsProps> = ({ approvedEvents, onCancelBooking
           dataSource={userBookings}
           rowKey="id"
           pagination={{ pageSize: 10 }}
-          scroll={{ x: 800 }}
+          scroll={{ x: 'max-content' }}
           size="small"
           style={{ width: '100%' }}
         />
