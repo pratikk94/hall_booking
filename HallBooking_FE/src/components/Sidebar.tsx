@@ -15,6 +15,22 @@ const { Sider } = Layout;
 interface SidebarProps {
   collapsed: boolean;
   onCollapse: (collapsed: boolean) => void;
+  approvedEvents: Array<{
+    id: string;
+    start: string;
+    end: string;
+    title: string;
+    backgroundColor: string;
+    extendedProps: {
+      hall: string;
+      organizer: string;
+      status: string;
+      department: string;
+      mobileNumber: string;
+      createdAt: string;
+      requestId: string;
+    };
+  }>;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ collapsed, onCollapse }) => {
