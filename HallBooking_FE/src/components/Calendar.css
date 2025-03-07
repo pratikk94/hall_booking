@@ -10,20 +10,24 @@
 }
 
 .fc-event {
-  color: black;
-  padding: 5px;
-  border-radius: 4px;
+  color: black !important;
+  padding: 4px !important;
+  border-radius: 4px !important;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  border: none !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
 
 .fc-event-title {
-  font-weight: bold;
+  font-weight: bold !important;
 }
 
 .fc-event:hover {
-  opacity: 0.8;
+  opacity: 0.9 !important;
+  transform: scale(1.02) !important;
+  transition: all 0.2s ease !important;
 }
 
 .fc-toolbar-title {
@@ -39,4 +43,30 @@
 .fc-button-primary:disabled {
   background-color: #1677ff88 !important;
   border-color: #1677ff88 !important;
+}
+
+/* Month view specific styles */
+.fc-daygrid-day-events {
+  margin: 0 !important;
+}
+
+.fc-daygrid-event {
+  margin: 2px 0 !important;
+}
+
+.fc-daygrid-day {
+  padding: 4px !important;
+}
+
+.fc-daygrid-day-number {
+  padding: 4px !important;
+}
+
+/* Ensure event colors are visible */
+.fc-event[style*="background-color: rgb(50, 205, 50)"] {
+  background-color: #32CD32 !important;
+}
+
+.fc-event[style*="background-color: rgb(255, 215, 0)"] {
+  background-color: #FFD700 !important;
 } 

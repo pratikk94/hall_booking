@@ -1,51 +1,71 @@
-import React, { useState } from 'react';
-import { Layout, Menu } from 'antd';
+import React from 'react';
+import { Layout, Menu, Button, Space } from 'antd';
 import {
   HomeOutlined,
   CalendarOutlined,
-  BookOutlined,
-  ContactsOutlined,
+  CheckSquareOutlined,
+  UserOutlined,
+  LogoutOutlined,
+  BookOutlined
 } from '@ant-design/icons';
-import type { MenuProps } from 'antd';
+import { useNavigate, useLocation } from 'react-router-dom';
+import MyBookings from './MyBookings';
 
 const { Sider } = Layout;
 
-const Sidebar: React.FC = () => {
-  const [collapsed, setCollapsed] = useState(false);
-  const [current, setCurrent] = useState<string>('home');
+interface SidebarProps {
+  collapsed: boolean;
+  onCollapse: (collapsed: boolean) => void;
+  approvedEvents: Array<{
+    id: string;
+    start: string;
+    end: string;
+    title: string;
+    backgroundColor: string;
+    extendedProps: {
+      hall: string;
+      organizer: string;
+      status: string;
+      department: string;
+      mobileNumber: string;
+      createdAt: string;
+      requestId: string;
+    };
+  }>;
+  onCancelBooking: (id: string) => void;
+}
 
-  const menuItems: MenuProps['items'] = [
+const Sidebar: React.FC<SidebarProps> = ({ collapsed, onCollapse, approvedEvents, onCancelBooking }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const menuItems = [
     {
-      key: 'home',
+      key: '/',
       icon: <HomeOutlined />,
       label: 'Home',
     },
     {
-      key: 'halls',
-      icon: <BookOutlined />,
-      label: 'Halls',
-    },
-    {
-      key: 'bookings',
+      key: '/calendar',
       icon: <CalendarOutlined />,
-      label: 'My Bookings',
+      label: 'Calendar',
     },
     {
-      key: 'contact',
-      icon: <ContactsOutlined />,
-      label: 'Contact',
+      key: '/approvals',
+      icon: <CheckSquareOutlined />,
+      label: 'My Bookings',
     },
   ];
 
-  const handleClick: MenuProps['onClick'] = (e) => {
-    setCurrent(e.key);
+  const handleMenuClick = (key: string) => {
+    navigate(key);
   };
 
   return (
-    <Sider
-      collapsible
+    <Sider 
+      trigger={null} 
+      collapsible 
       collapsed={collapsed}
-      onCollapse={(value) => setCollapsed(value)}
       style={{
         overflow: 'auto',
         height: '100vh',
@@ -53,16 +73,41 @@ const Sidebar: React.FC = () => {
         left: 0,
         top: 0,
         bottom: 0,
-        paddingTop: 64, // Height of the header
+        background: '#fff',
+        boxShadow: '2px 0 8px 0 rgba(29,35,41,.05)',
       }}
     >
+      <div style={{ padding: '16px', textAlign: 'center' }}>
+        <h2 style={{ margin: 0, color: '#1890ff' }}>Hall Booking</h2>
+      </div>
       <Menu
-        theme="dark"
+        theme="light"
         mode="inline"
-        selectedKeys={[current]}
+        selectedKeys={[location.pathname]}
         items={menuItems}
-        onClick={handleClick}
+        onClick={({ key }) => handleMenuClick(key)}
       />
+      <div style={{ padding: '16px', borderTop: '1px solid #f0f0f0' }}>
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <Button 
+            type="primary" 
+            icon={<LogoutOutlined />} 
+            block
+            danger
+          >
+            Logout
+          </Button>
+        </Space>
+      </div>
+      {/* {!collapsed && (
+        <div style={{ padding: '16px', borderTop: '1px solid #f0f0f0' }}>
+          <h3 style={{ marginBottom: '16px' }}>My Bookings</h3>
+          <MyBookings 
+            approvedEvents={approvedEvents} 
+            onCancelBooking={onCancelBooking}
+          />
+        </div>
+      )} */}
     </Sider>
   );
 };
