@@ -35,7 +35,11 @@ interface SidebarProps {
   }>;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ collapsed, onCollapse, approvedEvents, onCancelBooking, currentUser }) => {
+const Sidebar: React.FC<SidebarProps> = ({ collapsed, onCollapse,
+  // approvedEvents, 
+  // onCancelBooking,
+  //  currentUser 
+  }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [rulesModalVisible, setRulesModalVisible] = useState(false);

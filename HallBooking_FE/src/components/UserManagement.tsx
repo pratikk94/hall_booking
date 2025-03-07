@@ -156,11 +156,10 @@ const UserManagement: React.FC = () => {
     filterIcon: (filtered: boolean) => (
       <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
     ),
-    onFilter: (value, record: User) =>
-      record[dataIndex]
-        .toString()
+    onFilter: (value, record: User): boolean =>
+      record[dataIndex]?.toString()
         .toLowerCase()
-        .includes(value?.toString().toLowerCase() ?? ''),
+        .includes(value?.toString().toLowerCase() ?? '') || false,
     onFilterDropdownOpenChange: (visible: boolean) => {
       if (visible) {
         setTimeout(() => searchInput.current?.select(), 100);

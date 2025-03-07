@@ -160,10 +160,10 @@ const initialBookings: CalendarEvent[] = [
 ];
 
 // Mock current user data (replace with actual authentication later)
-const currentUser = {
-  name: 'John Doe',
-  department: 'IT'
-};
+// const currentUser = {
+//   name: 'John Doe',
+//   department: 'IT'
+// };
 
 const AppContent: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
